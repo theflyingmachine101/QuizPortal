@@ -7,3 +7,8 @@
 <title>Quiz Portal</title>
 </head>
 <body>
+<form action="<%=request.getContextPath()%>/Home" method="get">
+<input type="hidden" name="select" value="logout">
+<button type="submit">logout</button>
+<br/>
+</form>

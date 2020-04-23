@@ -26,6 +26,9 @@ public class HomeController extends HttpServlet {
 					  break;
 		case "usignup":request.getRequestDispatcher("/userSignup.jsp").forward(request, response);
 					  break;
+		case "logout":request.getSession().invalidate();
+						response.sendRedirect(request.getContextPath()+"/");
+						break;
 		default: request.getRequestDispatcher("/error.jsp").forward(request, response);
 		}
 	}

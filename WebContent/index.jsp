@@ -1,4 +1,12 @@
-<%@include file="reusables/header.jsp" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Quiz Portal</title>
+</head>
+<body>
 <h1>Welcome to Quiz Portal</h1>
 <h2>Admin Section:</h2>
 <form action="<%=request.getContextPath()%>/Home" method="get">
