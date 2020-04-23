@@ -13,14 +13,10 @@ public class HomeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String select="";
-		try{
+		String select;
 			select=request.getParameter("select");
-		}
-		finally
-		{
+		if(select==null)
 			select="";
-		}
 		switch(select){
 		case "alogin": request.getRequestDispatcher("/adminLogin.jsp").forward(request, response);
 						break;
