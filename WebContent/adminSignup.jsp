@@ -1,6 +1,7 @@
 <%@include file="reusables/header.jsp" %>
 <form action="<%=request.getContextPath()%>/Admin" method="post">
 <input type="hidden" name="select" value="adminsignup"/>
+<input type="hidden" name="check" value="no"/>
 Your name:<input type="text" name="adminName" required="required" />
 <br/>
 Your email:<input type="email" name="adminEmail" required="required"/>

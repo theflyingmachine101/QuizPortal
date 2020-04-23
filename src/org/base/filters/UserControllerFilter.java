@@ -11,18 +11,19 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@WebFilter("/User")
+public class UserControllerFilter implements Filter {
 
-@WebFilter("/Admin")
-public class AdminControllerFilter implements Filter {
-
-
+	
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
+
 	
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+	
 		HttpServletResponse response = (HttpServletResponse) res;
-		HttpServletRequest request =  (HttpServletRequest) req;
+		HttpServletRequest request =  (HttpServletRequest) req; 
 		if((request.getParameter("check")==null)&&(request.getSession().getAttribute("currentuser")==null))
 			response.sendRedirect(request.getContextPath()+"/");
 		else

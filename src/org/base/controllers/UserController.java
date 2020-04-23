@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.base.entities.UserUser;
@@ -70,6 +71,10 @@ public class UserController extends HttpServlet {
 			}
 			else if(adminPassword.equals(reUser.getUpassword()))
 			{
+				request.getSession().invalidate();
+				HttpSession newSession = request.getSession(true);
+				newSession.setMaxInactiveInterval(300);
+			    newSession.setAttribute("currentuser", reUser.getUname());
 				response.sendRedirect(request.getContextPath()+"/User?select=options");
 			}
 			else
@@ -86,7 +91,11 @@ public class UserController extends HttpServlet {
 	new UserUserModel().addUser(dataSource, new UserUser(request.getParameter("userName"),
 			request.getParameter("userEmail"),
 			request.getParameter("userPassword")));
-	response.sendRedirect(request.getContextPath()+"/User?select=options");
+			request.getSession().invalidate();
+			HttpSession newSession = request.getSession(true);
+			newSession.setMaxInactiveInterval(300);
+			newSession.setAttribute("currentuser",request.getParameter("userName"));
+			response.sendRedirect(request.getContextPath()+"/User?select=options");
 	
 }
 
