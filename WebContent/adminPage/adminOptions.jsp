@@ -1,6 +1,12 @@
 <%@include file="reusables/header.jsp" %>
 <h1>What do you want to do</h1>
-<a>See your Quizzes</a>
+<form action="<%=request.getContextPath()%>/Admin" method="get">
+<input type="hidden" name="select" value="createquiz"/>
+<button type="submit">Create a Quiz</button>
+</form>
 <br/>
-<a>Create a Quiz</a>
+<form action="<%=request.getContextPath()%>/Admin" method="get">
+<input type="hidden" name="select" value="showquiz"/>
+<button type="submit">Show your Quizzes</button>
+</form>
 <%@include file="reusables/footer.jsp"  %>

@@ -1,6 +1,7 @@
 package org.base.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -12,7 +13,11 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.base.entities.AdminUser;
+import org.base.entities.QuizInfo;
+import org.base.entities.QuizQuestion;
 import org.base.models.AdminUserModel;
+import org.base.models.QuizModel;
+
 
 @WebServlet("/Admin")
 public class AdminController extends HttpServlet {
@@ -32,10 +37,37 @@ public class AdminController extends HttpServlet {
 		{
 		case "options":request.getRequestDispatcher("/adminPage/adminOptions.jsp").forward(request,response);
 						break;
+		case "showquiz":showQuiz(request,response);
+						break;
+		case "showquizdetail":showQuizDetail(request,response);
+							 break;
+		case "createquiz":
+							break;
 		default: request.getRequestDispatcher("/error.jsp").forward(request, response);
 		}
 		
 	}
+
+
+	private void showQuiz(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+		AdminUser reUser=new AdminUserModel().searchUser(dataSource,(String)(request.getSession().getAttribute("currentuser")));
+		
+		List<QuizInfo> quiz=new QuizModel().showQuiz(dataSource,reUser.getId());
+		request.setAttribute("AdminQuiz",quiz);
+		request.getRequestDispatcher("/adminPage/showQuizzes.jsp").forward(request, response);
+	}
+	
+	private void showQuizDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		List<QuizQuestion> quizDetail=new QuizModel().showQuizQuestion(dataSource,Integer.parseInt(request.getParameter("qid")));
+		request.setAttribute("quizDetail",quizDetail);
+		request.setAttribute("quizName",(String)request.getParameter("quizName"));
+		request.getRequestDispatcher("/adminPage/showQuizDetail.jsp").forward(request, response);
+	}
+
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String select=request.getParameter("select");
@@ -73,7 +105,7 @@ public class AdminController extends HttpServlet {
 				request.getSession().invalidate();
 				HttpSession newSession = request.getSession(true);
 				newSession.setMaxInactiveInterval(300);
-			    newSession.setAttribute("currentuser", reUser.getAname());
+			    newSession.setAttribute("currentuser", reUser.getAemail());
 				response.sendRedirect(request.getContextPath()+"/Admin?select=options");
 			}
 			else
@@ -93,7 +125,7 @@ public class AdminController extends HttpServlet {
 			request.getSession().invalidate();
 			HttpSession newSession = request.getSession(true);
 			newSession.setMaxInactiveInterval(300);
-			newSession.setAttribute("currentuser",request.getParameter("adminName"));
+			newSession.setAttribute("currentuser",request.getParameter("adminEmail"));
 			response.sendRedirect(request.getContextPath()+"/Admin?select=options");
 	
 }
