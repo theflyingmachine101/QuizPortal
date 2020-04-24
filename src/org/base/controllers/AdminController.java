@@ -29,7 +29,6 @@ public class AdminController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String select=request.getParameter("select");
 		select=select.toLowerCase();
-		
 		if(select==null)
 			select="";
 		
@@ -41,11 +40,20 @@ public class AdminController extends HttpServlet {
 						break;
 		case "showquizdetail":showQuizDetail(request,response);
 							 break;
-		case "createquiz":
+		case "createquiz": createQuiz(request,response);
 							break;
 		default: request.getRequestDispatcher("/error.jsp").forward(request, response);
 		}
 		
+	}
+
+
+	private void createQuiz(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		AdminUser reUser=new AdminUserModel().searchUser(dataSource,
+				(String)(request.getSession().getAttribute("currentuser")));
+		QuizInfo reQuiz=new QuizModel().createQuiz(dataSource,reUser.getId(),request.getParameter("quizName"));
+		request.setAttribute("reQuiz", reQuiz);
+		request.getRequestDispatcher("/adminPage/addQuestion.jsp").forward(request, response);
 	}
 
 
@@ -82,6 +90,8 @@ public class AdminController extends HttpServlet {
 						 break;
 		case "adminsignup":addUser(request,response);
 		 				   break;
+		case "addquestion": addQuestion(request,response);
+			break;
 		default: request.getRequestDispatcher("/error.jsp").forward(request, response);
 		}
 		
@@ -90,6 +100,8 @@ public class AdminController extends HttpServlet {
 	
 	
 	
+
+
 	private void searchUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			
 	AdminUser reUser=new AdminUserModel().searchUser(dataSource,request.getParameter("adminEmail"));
@@ -129,5 +141,21 @@ public class AdminController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/Admin?select=options");
 	
 }
+	private void addQuestion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int qid=Integer.parseInt(request.getParameter("qid"));
+		int aid=Integer.parseInt(request.getParameter("aid"));
+		int answer=Integer.parseInt(request.getParameter("answer"));
+		int mm=Integer.parseInt(request.getParameter("mm"));
+		int nm=Integer.parseInt(request.getParameter("nm"));
+		String question= request.getParameter("question");
+		String option1= request.getParameter("option1");
+		String option2= request.getParameter("option2");
+		String option3= request.getParameter("option3");
+		String option4= request.getParameter("option4");
+		String qname= request.getParameter("qname");
+		new QuizModel().addQuestion(dataSource,qid,question,option1,option2,option3,option4,answer,mm,nm);
+		request.setAttribute("reQuiz",new QuizInfo(qid,aid,qname));
+		request.getRequestDispatcher("/adminPage/addQuestion.jsp").forward(request, response);
+	}
 
 }
