@@ -39,6 +39,32 @@ public class QuizModel {
 		}
 		return answer;
 	}
+	
+	public List<QuizInfo> showAllQuiz(DataSource dataSource)
+	{
+		Connection connect = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        List<QuizInfo> answer=new ArrayList<>();
+        try {
+			connect = dataSource.getConnection();			
+			String query = "Select * from quizinfo";
+			stmt = connect.createStatement();
+         rs = stmt.executeQuery(query);
+         while(rs.next())
+         {
+        	answer.add(new QuizInfo(rs.getInt("qid"),
+        			rs.getInt("aid"),
+        			rs.getString("qname")));
+         }
+
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return answer;
+	}
+	
 	public List<QuizQuestion> showQuizQuestion(DataSource dataSource,int id)
 	{
 		Connection connect = null;
